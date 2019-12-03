@@ -5,7 +5,7 @@ type CombinationRank int
 
 // All the possible combinations
 const (
-	HighCard = iota
+	HighCard = iota + 1
 	OnePair
 	TwoPairs
 	ThreeOfAKind
@@ -15,6 +15,31 @@ const (
 	FourOfAKind
 	StraightFlush
 )
+
+func (rank CombinationRank) String() string {
+	switch rank {
+	case HighCard:
+		return "HighCard"
+	case OnePair:
+		return "OnePair"
+	case TwoPairs:
+		return "TwoPairs"
+	case ThreeOfAKind:
+		return "ThreeOfAKind"
+	case Straight:
+		return "Straight"
+	case Flush:
+		return "Flush"
+	case FullHouse:
+		return "FullHouse"
+	case FourOfAKind:
+		return "FourOfAKind"
+	case StraightFlush:
+		return "StraightFlush"
+	default:
+		return "Invalid Combination"
+	}
+}
 
 // Combination definition
 // RelatedCards -> All the cards being used for the combination

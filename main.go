@@ -2,6 +2,7 @@ package main
 
 import (
 	"Poker/poker"
+	"fmt"
 )
 
 func main() {
@@ -15,11 +16,11 @@ func main() {
 			Suit:  poker.Spades,
 		},
 		{
-			Value: poker.Two,
+			Value: poker.Three,
 			Suit:  poker.Hearts,
 		},
 		{
-			Value: poker.Four,
+			Value: poker.Two,
 			Suit:  poker.Spades,
 		},
 		{
@@ -28,5 +29,7 @@ func main() {
 		},
 	}
 
-	poker.NewHand(cards)
+	hand := poker.NewHand(cards)
+	fmt.Println(hand.Combination.Combination)
+	fmt.Println(hand.Combination)
 }
