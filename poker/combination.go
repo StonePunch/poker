@@ -12,7 +12,7 @@ const (
 	Straight
 	Flush
 	FullHouse
-	Poker
+	FourOfAKind
 	StraightFlush
 )
 

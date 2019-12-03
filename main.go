@@ -15,15 +15,15 @@ func main() {
 			Suit:  poker.Spades,
 		},
 		{
-			Value: poker.Three,
+			Value: poker.Two,
 			Suit:  poker.Hearts,
 		},
 		{
-			Value: poker.Five,
+			Value: poker.Four,
 			Suit:  poker.Spades,
 		},
 		{
-			Value: poker.Five,
+			Value: poker.Four,
 			Suit:  poker.Diamonds,
 		},
 	}

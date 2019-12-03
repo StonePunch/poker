@@ -18,7 +18,7 @@ func sortCardsByValue(cards []Card) []Card {
 	return cards
 }
 
-func NewHand(cards []Card) (hand Hand)  {
+func NewHand(cards []Card) (hand Hand) {
 	hand = Hand{
 		Cards:       sortCardsByValue(cards),
 		Combination: Combination{},
@@ -31,6 +31,8 @@ func NewHand(cards []Card) (hand Hand)  {
 		hand.Combination = combination
 		return hand
 	}
+
+	// TODO: FourOfAKind
 
 	// TODO: FullHouse
 
@@ -60,12 +62,12 @@ func NewHand(cards []Card) (hand Hand)  {
 func (hand Hand) hasStraightFlush() (combination Combination, isNil bool) {
 	combination, isNil = hand.hasFlush()
 	if isNil {
-		return combination,true
+		return combination, true
 	}
 
 	combination, isNil = hand.hasStraight()
 	if isNil {
-		return combination,true
+		return combination, true
 	}
 
 	combination.Combination = StraightFlush
@@ -75,7 +77,7 @@ func (hand Hand) hasStraightFlush() (combination Combination, isNil bool) {
 
 func (hand Hand) hasFlush() (combination Combination, isNil bool) {
 	for i := 1; i < len(hand.Cards); i++ {
-		if hand.Cards[i - 1].Suit != hand.Cards[i].Suit {
+		if hand.Cards[i-1].Suit != hand.Cards[i].Suit {
 			return combination, true
 		}
 	}
@@ -84,15 +86,15 @@ func (hand Hand) hasFlush() (combination Combination, isNil bool) {
 		Combination:    Flush,
 		RelatedCards:   [][]Card{hand.Cards},
 		UnrelatedCards: []Card{},
-		HighestCard:    hand.Cards[len(hand.Cards) - 1],
+		HighestCard:    hand.Cards[len(hand.Cards)-1],
 	}
 
 	return combination, false
 }
 
 func (hand Hand) hasStraight() (combination Combination, isNil bool) {
-	for i := 1; i < len(hand.Cards) - 1; i++ {
-		if hand.Cards[i - 1].Value + 1 != hand.Cards[i].Value {
+	for i := 1; i < len(hand.Cards)-1; i++ {
+		if hand.Cards[i-1].Value+1 != hand.Cards[i].Value {
 			return combination, true
 		}
 	}
@@ -101,25 +103,25 @@ func (hand Hand) hasStraight() (combination Combination, isNil bool) {
 		Combination:    Straight,
 		RelatedCards:   [][]Card{hand.Cards},
 		UnrelatedCards: []Card{},
-		HighestCard:    hand.Cards[len(hand.Cards) - 1],
+		HighestCard:    hand.Cards[len(hand.Cards)-1],
 	}
 
 	return combination, false
 }
 
-func (hand Hand) hasSameValues() (combination Combination, isNil bool)  {
+func (hand Hand) hasSameValues() (combination Combination, isNil bool) {
 	var pairs [][]Card
 	var unrelatedCards []Card
 	pairCard := hand.Cards[0]
 	pairCounter := 0
 	// TODO: Check wtf is wrong with this 'for' validation
-	for i := 1; i <= len(hand.Cards) - 1; i++ {
+	for i := 1; i <= len(hand.Cards)-1; i++ {
 		if pairCard.Value == hand.Cards[i].Value {
 			pairCounter++
 		} else if pairCounter != 0 {
 			pairsLength := len(pairs)
 			pairs = append(pairs, []Card{})
- 			for c := 0; c < pairCounter + 1; c++ {
+			for c := 0; c < pairCounter+1; c++ {
 				pairs[pairsLength] = append(pairs[pairsLength], pairCard)
 			}
 
@@ -134,12 +136,10 @@ func (hand Hand) hasSameValues() (combination Combination, isNil bool)  {
 	if pairCounter != 0 {
 		pairsLength := len(pairs)
 		pairs = append(pairs, []Card{})
-		for c := 0; c < pairCounter + 1; c++ {
+		for c := 0; c < pairCounter+1; c++ {
 			pairs[pairsLength] = append(pairs[pairsLength], pairCard)
 		}
-	}
-
-	if pairCounter == 0 {
+	} else {
 		unrelatedCards = append(unrelatedCards, pairCard)
 	}
 
@@ -147,19 +147,43 @@ func (hand Hand) hasSameValues() (combination Combination, isNil bool)  {
 		return combination, true
 	}
 
-	// TODO: Figure out how to set the correct 'Combination'
+	var rank CombinationRank
+	if len(pairs) == 2 {
+		rank = FullHouse
+		if len(pairs[0]) > len(pairs[1]) {
+			rank = FullHouse
+			pairs = [][]Card{
+				pairs[1],
+				pairs[0],
+			}
+		} else if len(pairs[0]) == len(pairs[1]) {
+			rank = TwoPairs
+		}
+	} else {
+		switch len(pairs[0]) {
+		case 2:
+			rank = OnePair
+			break
+		case 3:
+			rank = ThreeOfAKind
+			break
+		case 4:
+			rank = FourOfAKind
+			break
+		}
+	}
 
 	combination = Combination{
-		Combination:    Straight,
+		Combination:    rank,
 		RelatedCards:   pairs,
 		UnrelatedCards: unrelatedCards,
-		HighestCard:    hand.Cards[len(hand.Cards) - 1],
+		HighestCard:    pairs[len(pairs)-1][0],
 	}
 
 	return combination, false
 }
 
-func (hand Hand) hasHighCard() (combination Combination, isNil bool)  {
+func (hand Hand) hasHighCard() (combination Combination, isNil bool) {
 
 	// TODO: Finish this
 
