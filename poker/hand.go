@@ -1,7 +1,9 @@
 package poker
 
 import (
+	"fmt"
 	"sort"
+	"strconv"
 )
 
 // Hand definition
@@ -31,60 +33,57 @@ func NewHand(cards []Card) (hand Hand) {
 	}
 
 	combination := hand.hasStraightFlush()
-	if combination.Combination == StraightFlush {
+	if combination.Rank == StraightFlush {
 		hand.Combination = combination
-		return hand
 	}
 
 	sameValueCombination := hand.hasSameValues()
-	if sameValueCombination.Combination == FourOfAKind ||
-		sameValueCombination.Combination == FullHouse {
+	if sameValueCombination.Rank == FourOfAKind ||
+		sameValueCombination.Rank == FullHouse {
 		hand.Combination = sameValueCombination
-		return hand
 	}
 
 	combination = hand.hasFlush()
-	if combination.Combination == Flush {
+	if combination.Rank == Flush {
 		hand.Combination = combination
-		return hand
 	}
 
 	combination = hand.hasStraight()
-	if combination.Combination == Straight {
+	if combination.Rank == Straight {
 		hand.Combination = combination
-		return hand
 	}
 
-	if sameValueCombination.Combination == ThreeOfAKind ||
-		sameValueCombination.Combination == TwoPairs ||
-		sameValueCombination.Combination == OnePair {
+	if sameValueCombination.Rank == ThreeOfAKind ||
+		sameValueCombination.Rank == TwoPairs ||
+		sameValueCombination.Rank == OnePair {
 		hand.Combination = sameValueCombination
-		return hand
 	}
 
 	highCard := hand.Cards[len(hand.Cards)-1]
 	hand.Combination = Combination{
-		Combination:    HighCard,
+		Rank:           HighCard,
 		RelatedCards:   [][]Card{{highCard}},
 		UnrelatedCards: hand.Cards[:len(hand.Cards)-1],
 		HighestCard:    highCard,
 	}
+
+	hand.Rank = hand.calcHandRank()
 
 	return hand
 }
 
 func (hand Hand) hasStraightFlush() (combination Combination) {
 	combination = hand.hasFlush()
-	if combination.Combination != Flush {
+	if combination.Rank != Flush {
 		return combination
 	}
 
 	combination = hand.hasStraight()
-	if combination.Combination != Straight {
+	if combination.Rank != Straight {
 		return combination
 	}
 
-	combination.Combination = StraightFlush
+	combination.Rank = StraightFlush
 
 	return combination
 }
@@ -97,7 +96,7 @@ func (hand Hand) hasFlush() (combination Combination) {
 	}
 
 	combination = Combination{
-		Combination:    Flush,
+		Rank:           Flush,
 		RelatedCards:   [][]Card{hand.Cards},
 		UnrelatedCards: []Card{},
 		HighestCard:    hand.Cards[len(hand.Cards)-1],
@@ -126,7 +125,7 @@ func (hand Hand) hasStraight() (combination Combination) {
 	}
 	
 	combination = Combination{
-		Combination:    Straight,
+		Rank:           Straight,
 		RelatedCards:   [][]Card{hand.Cards},
 		UnrelatedCards: []Card{},
 		HighestCard:    hand.Cards[len(hand.Cards) - 1],
@@ -135,6 +134,7 @@ func (hand Hand) hasStraight() (combination Combination) {
 	return combination
 }
 
+// hasSameValues handles the FourOfAKind, FullHouse, ThreeOfAKind, TwoPair and OnePair combinations
 func (hand Hand) hasSameValues() (combination Combination) {
 	cardStacks := make(map[Value][]Card)
 	for _, card := range hand.Cards {
@@ -182,11 +182,31 @@ func (hand Hand) hasSameValues() (combination Combination) {
 	}
 
 	combination = Combination{
-		Combination:    rank,
+		Rank:           rank,
 		RelatedCards:   pairs,
 		UnrelatedCards: unrelatedCards,
 		HighestCard:    pairs[len(pairs)-1][0],
 	}
 
 	return combination
+}
+
+func (hand Hand) calcHandRank() (rank int) {
+	rankString := fmt.Sprintf("%02d", hand.Combination.Rank)
+
+	rankString += fmt.Sprintf("%02d", hand.Combination.HighestCard.Value)
+
+	if len(hand.Combination.RelatedCards) == 2 {
+		rankString += fmt.Sprintf("%02d", hand.Combination.RelatedCards[0][0].Value)
+	} else {
+		rankString += fmt.Sprintf("%02d", 0)
+	}
+
+	for i := len(hand.Combination.UnrelatedCards) - 1; i >= 0; i-- {
+		rankString += fmt.Sprintf("%02d", hand.Combination.UnrelatedCards[i].Value)
+	}
+
+	rank, _ = strconv.Atoi(rankString)
+
+	return rank
 }

@@ -37,16 +37,16 @@ func (rank CombinationRank) String() string {
 	case StraightFlush:
 		return "StraightFlush"
 	default:
-		return "Invalid Combination"
+		return "Invalid Rank"
 	}
 }
 
-// Combination definition
+// Rank definition
 // RelatedCards -> All the cards being used for the combination
 // UnrelatedCards -> Cards left unused in the combination
 // HighestCard -> The card with the highest value within the RelatedCards
 type Combination struct {
-	Combination    CombinationRank
+	Rank           CombinationRank
 	RelatedCards   [][]Card
 	UnrelatedCards []Card
 	HighestCard    Card

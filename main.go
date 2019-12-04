@@ -31,4 +31,5 @@ func main() {
 
 	hand := poker.NewHand(cards)
 	fmt.Println(hand.Combination)
+	fmt.Println(hand.Rank)
 }
