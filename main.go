@@ -9,23 +9,23 @@ func main() {
 	cards := []poker.Card{
 		{
 			Value: poker.Three,
-			Suit:  poker.Clubs,
+			Suit:  poker.Hearts,
 		},
 		{
-			Value: poker.Three,
+			Value: poker.Four,
 			Suit:  poker.Spades,
 		},
 		{
-			Value: poker.Three,
+			Value: poker.Ace,
 			Suit:  poker.Hearts,
 		},
 		{
 			Value: poker.Two,
-			Suit:  poker.Spades,
+			Suit:  poker.Clubs,
 		},
 		{
-			Value: poker.Four,
-			Suit:  poker.Diamonds,
+			Value: poker.Five,
+			Suit:  poker.Hearts,
 		},
 	}
 
