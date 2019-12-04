@@ -30,6 +30,5 @@ func main() {
 	}
 
 	hand := poker.NewHand(cards)
-	fmt.Println(hand.Combination.Combination)
 	fmt.Println(hand.Combination)
 }
