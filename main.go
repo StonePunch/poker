@@ -6,30 +6,13 @@ import (
 )
 
 func main() {
-	cards := []poker.Card{
-		{
-			Value: poker.Three,
-			Suit:  poker.Hearts,
-		},
-		{
-			Value: poker.Four,
-			Suit:  poker.Spades,
-		},
-		{
-			Value: poker.Ace,
-			Suit:  poker.Hearts,
-		},
-		{
-			Value: poker.Two,
-			Suit:  poker.Clubs,
-		},
-		{
-			Value: poker.Five,
-			Suit:  poker.Hearts,
-		},
-	}
+	game := poker.NewGame(10)
 
-	hand := poker.NewHand(cards)
-	fmt.Println(hand.Combination)
-	fmt.Println(hand.Rank)
+	for i := 0; i < len(game.Hands); i++ {
+		//fmt.Println(game.Hands[i].Rank)
+		fmt.Println(game.Hands[i].Combination.Rank, game.Hands[i].Combination.HighestCard)
+		fmt.Println(game.Hands[i].Combination.RelatedCards)
+		fmt.Println(game.Hands[i].Combination.UnrelatedCards)
+		fmt.Println("")
+	}
 }

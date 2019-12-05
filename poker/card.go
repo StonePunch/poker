@@ -1,5 +1,11 @@
 package poker
 
+// Card definition
+type Card struct {
+	Value Value
+	Suit  Suit
+}
+
 // Value enum
 type Value int
 
@@ -77,10 +83,4 @@ func (suit Suit) String() string {
 	default:
 		return "Invalid Suit"
 	}
-}
-
-// Card definition
-type Card struct {
-	Value Value
-	Suit  Suit
 }

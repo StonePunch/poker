@@ -59,12 +59,14 @@ func NewHand(cards []Card) (hand Hand) {
 		hand.Combination = sameValueCombination
 	}
 
-	highCard := hand.Cards[len(hand.Cards)-1]
-	hand.Combination = Combination{
-		Rank:           HighCard,
-		RelatedCards:   [][]Card{{highCard}},
-		UnrelatedCards: hand.Cards[:len(hand.Cards)-1],
-		HighestCard:    highCard,
+	if hand.Combination.Rank == 0 {
+		highCard := hand.Cards[len(hand.Cards)-1]
+		hand.Combination = Combination{
+			Rank:           HighCard,
+			RelatedCards:   [][]Card{{highCard}},
+			UnrelatedCards: hand.Cards[:len(hand.Cards) - 1],
+			HighestCard:    highCard,
+		}
 	}
 
 	hand.Rank = hand.calcHandRank()
@@ -143,8 +145,8 @@ func (hand Hand) hasSameValues() (combination Combination) {
 
 	var pairs [][]Card
 	var unrelatedCards []Card
-	for key, card := range cardStacks {
-		if len(cardStacks[key]) > 1 {
+	for _, card := range cardStacks {
+		if len(card) > 1 {
 			pairs = append(pairs, card)
 		} else {
 			unrelatedCards = append(unrelatedCards, card[0])
