@@ -62,10 +62,9 @@ func NewHand(cards []Card) (hand Hand) {
 	if hand.Combination.Rank == 0 {
 		highCard := hand.Cards[len(hand.Cards)-1]
 		hand.Combination = Combination{
-			Rank:           HighCard,
-			RelatedCards:   [][]Card{{highCard}},
-			UnrelatedCards: hand.Cards[:len(hand.Cards) - 1],
-			HighestCard:    highCard,
+			Rank:                HighCard,
+			RelatedCards:        [][]Card{{highCard}},
+			UnrelatedCards:      hand.Cards[:len(hand.Cards) - 1],
 		}
 	}
 
@@ -98,10 +97,9 @@ func (hand Hand) hasFlush() (combination Combination) {
 	}
 
 	combination = Combination{
-		Rank:           Flush,
-		RelatedCards:   [][]Card{hand.Cards},
-		UnrelatedCards: []Card{},
-		HighestCard:    hand.Cards[len(hand.Cards)-1],
+		Rank:                Flush,
+		RelatedCards:        [][]Card{hand.Cards},
+		UnrelatedCards:      []Card{},
 	}
 
 	return combination
@@ -127,10 +125,9 @@ func (hand Hand) hasStraight() (combination Combination) {
 	}
 	
 	combination = Combination{
-		Rank:           Straight,
-		RelatedCards:   [][]Card{hand.Cards},
-		UnrelatedCards: []Card{},
-		HighestCard:    hand.Cards[len(hand.Cards) - 1],
+		Rank:                Straight,
+		RelatedCards:        [][]Card{hand.Cards},
+		UnrelatedCards:      []Card{},
 	}
 
 	return combination
@@ -161,7 +158,6 @@ func (hand Hand) hasSameValues() (combination Combination) {
 	if len(pairs) == 2 {
 		rank = FullHouse
 		if len(pairs[0]) > len(pairs[1]) {
-			rank = FullHouse
 			pairs = [][]Card{
 				pairs[1],
 				pairs[0],
@@ -184,10 +180,9 @@ func (hand Hand) hasSameValues() (combination Combination) {
 	}
 
 	combination = Combination{
-		Rank:           rank,
-		RelatedCards:   pairs,
-		UnrelatedCards: unrelatedCards,
-		HighestCard:    pairs[len(pairs)-1][0],
+		Rank:                rank,
+		RelatedCards:        pairs,
+		UnrelatedCards:      unrelatedCards,
 	}
 
 	return combination
@@ -196,15 +191,19 @@ func (hand Hand) hasSameValues() (combination Combination) {
 func (hand Hand) calcHandRank() (rank int) {
 	rankString := fmt.Sprintf("%02d", hand.Combination.Rank)
 
-	rankString += fmt.Sprintf("%02d", hand.Combination.HighestCard.Value)
-
-	if len(hand.Combination.RelatedCards) == 2 {
-		rankString += fmt.Sprintf("%02d", hand.Combination.RelatedCards[0][0].Value)
-	} else {
-		rankString += fmt.Sprintf("%02d", 0)
+	lastRelatedSliceIndex := len(hand.Combination.RelatedCards) - 1
+	lastRelatedSlice := hand.Combination.RelatedCards[lastRelatedSliceIndex]
+	for i := len(lastRelatedSlice) - 1; 0 <= i ; i-- {
+		rankString += fmt.Sprintf("%02d", lastRelatedSlice[i].Value)
 	}
 
-	for i := len(hand.Combination.UnrelatedCards) - 1; i >= 0; i-- {
+	if len(hand.Combination.RelatedCards) == 2 {
+		for i := len(hand.Combination.RelatedCards[0]) - 1; 0 <= i ; i-- {
+			rankString += fmt.Sprintf("%02d", hand.Combination.RelatedCards[0][i].Value)
+		}
+	}
+
+	for i := len(hand.Combination.UnrelatedCards) - 1; 0 <= i; i-- {
 		rankString += fmt.Sprintf("%02d", hand.Combination.UnrelatedCards[i].Value)
 	}
 

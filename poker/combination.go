@@ -3,12 +3,10 @@ package poker
 // Rank definition
 // RelatedCards -> All the cards being used for the combination
 // UnrelatedCards -> Cards left unused in the combination
-// HighestCard -> The card with the highest value within the RelatedCards
 type Combination struct {
-	Rank           CombinationRank
-	RelatedCards   [][]Card
+	Rank                CombinationRank
+	RelatedCards        [][]Card
 	UnrelatedCards []Card
-	HighestCard    Card
 }
 
 // CombinationRank enum
