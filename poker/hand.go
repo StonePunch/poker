@@ -197,14 +197,16 @@ func (hand Hand) calcHandRank() (rank int) {
 		rankString += fmt.Sprintf("%02d", lastRelatedSlice[i].Value)
 	}
 
-	if len(hand.Combination.RelatedCards) == 2 {
-		for i := len(hand.Combination.RelatedCards[0]) - 1; 0 <= i ; i-- {
-			rankString += fmt.Sprintf("%02d", hand.Combination.RelatedCards[0][i].Value)
+	relatedCards := hand.Combination.RelatedCards
+	if len(relatedCards) == 2 {
+		for i := len(relatedCards[0]) - 1; 0 <= i ; i-- {
+			rankString += fmt.Sprintf("%02d", relatedCards[0][i].Value)
 		}
 	}
 
-	for i := len(hand.Combination.UnrelatedCards) - 1; 0 <= i; i-- {
-		rankString += fmt.Sprintf("%02d", hand.Combination.UnrelatedCards[i].Value)
+	unrelatedCards := hand.Combination.UnrelatedCards
+	for i := len(unrelatedCards) - 1; 0 <= i; i-- {
+		rankString += fmt.Sprintf("%02d", unrelatedCards[i].Value)
 	}
 
 	rank, _ = strconv.Atoi(rankString)
