@@ -21,7 +21,9 @@ func sortCardsByValue(cards []Card) []Card {
 	return cards
 }
 
-func NewHand(cards []Card) (hand Hand) {
+func NewHand(cards []Card) Hand {
+	var hand Hand
+
 	if len(cards) != 5 {
 		return hand
 	}
@@ -60,7 +62,7 @@ func NewHand(cards []Card) (hand Hand) {
 	}
 
 	if hand.Combination.Rank == 0 {
-		highCard := hand.Cards[len(hand.Cards)-1]
+		highCard := hand.Cards[len(hand.Cards) - 1]
 		hand.Combination = Combination{
 			Rank:                HighCard,
 			RelatedCards:        [][]Card{{highCard}},
@@ -73,7 +75,9 @@ func NewHand(cards []Card) (hand Hand) {
 	return hand
 }
 
-func (hand Hand) hasStraightFlush() (combination Combination) {
+func (hand Hand) hasStraightFlush() Combination {
+	var combination Combination
+
 	combination = hand.hasFlush()
 	if combination.Rank != Flush {
 		return combination
@@ -89,9 +93,11 @@ func (hand Hand) hasStraightFlush() (combination Combination) {
 	return combination
 }
 
-func (hand Hand) hasFlush() (combination Combination) {
+func (hand Hand) hasFlush() Combination {
+	var combination Combination
+
 	for i := 1; i < len(hand.Cards); i++ {
-		if hand.Cards[i-1].Suit != hand.Cards[i].Suit {
+		if hand.Cards[i - 1].Suit != hand.Cards[i].Suit {
 			return combination
 		}
 	}
@@ -105,7 +111,9 @@ func (hand Hand) hasFlush() (combination Combination) {
 	return combination
 }
 
-func (hand Hand) hasStraight() (combination Combination) {
+func (hand Hand) hasStraight() Combination {
+	var combination Combination
+
 	if hand.Cards[len(hand.Cards) - 1].Value == Ace {
 		if hand.Cards[0].Value != Two {
 			return combination
@@ -134,7 +142,9 @@ func (hand Hand) hasStraight() (combination Combination) {
 }
 
 // hasSameValues handles the FourOfAKind, FullHouse, ThreeOfAKind, TwoPair and OnePair combinations
-func (hand Hand) hasSameValues() (combination Combination) {
+func (hand Hand) hasSameValues() Combination {
+	var combination Combination
+
 	cardStacks := make(map[Value][]Card)
 	for _, card := range hand.Cards {
 		cardStacks[card.Value] = append(cardStacks[card.Value], card)
@@ -188,7 +198,9 @@ func (hand Hand) hasSameValues() (combination Combination) {
 	return combination
 }
 
-func (hand Hand) calcHandRank() (rank int) {
+func (hand Hand) calcHandRank() int {
+	var rank int
+
 	rankString := fmt.Sprintf("%02d", hand.Combination.Rank)
 
 	lastRelatedSliceIndex := len(hand.Combination.RelatedCards) - 1

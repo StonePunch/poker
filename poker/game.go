@@ -11,7 +11,9 @@ type Game struct {
 	Hands []Hand
 }
 
-func NewGame(players int) (game Game) {
+func NewGame(players int) Game {
+	var game Game
+
 	if players > 10 {
 		return game
 	}
@@ -27,7 +29,9 @@ func NewGame(players int) (game Game) {
 	return game
 }
 
-func generateHands() (hands []Hand)  {
+func generateHands() []Hand  {
+	var hands []Hand
+
 	deck := generateDeck()
 
 	handNumber := 0
@@ -49,11 +53,12 @@ func generateHands() (hands []Hand)  {
 	for _, card := range cards {
 		hands = append(hands, NewHand(card))
 	}
-
 	return hands
 }
 
-func generateDeck() (deck []Card)  {
+func generateDeck() []Card  {
+	var deck []Card
+
 	// Generate a 52 card deck
 	const maxSuit Suit = 4
 	const maxValue Value = 13
@@ -85,6 +90,5 @@ func sortHandsByRank(hands []Hand) []Hand {
 	sort.Slice(hands, func(i int, j int) bool {
 		return hands[i].Rank < hands[j].Rank
 	})
-
 	return hands
 }
